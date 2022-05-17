@@ -41,9 +41,10 @@ jobs:
           repository: ${{ matrix.project.repository }}
 
       - name: Check out ${{ matrix.project.repository }}
-        uses: actions/checkout@master
+        uses: actions/checkout@v2
         with:
           repository: ${{ matrix.project.repository }}
+          path: ${{ matrix.project.folder }}
 
       - name: Compile ${{ matrix.project.repository }}
         run: |
