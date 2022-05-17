@@ -47,14 +47,7 @@ jobs:
 
       - name: Compile ${{ matrix.project.repository }}
         run: |
+          ls -al
+          ls ${{ matrix.project.folder }}
           pio run -d ${{ matrix.project.folder }} -e ${{ matrix.project.envname }}
 
-      - name: Slack Notification
-        uses: homoluctus/slatify@master
-        if: failure()
-        with:
-          type: ${{ job.status }}
-          job_name: '*Core*'
-          commit: true
-          url: ${{ secrets.SLACK_BUILD_WEBHOOK }}
-          token: ${{ secrets.SLACK_GITHUB_TOKEN }}
