@@ -1,19 +1,25 @@
-name: Core
+name: Projects
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - release/*
+      - projects/*
+      - featre/project*
+      - develop
+  pull_request:
 
 jobs:
   build:
     strategy:
       fail-fast: false
       matrix:
+        project:
+          - marlin:
+            repository: "MarlinFirmware/Marlin"
+            envname: "teensy36"
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ["3.6", "3.7", "3.8", "3.9", "3.10"]
-        exclude:
-          - os: macos-latest
-            python-version: "3.6"
-          - os: windows-latest
-            python-version: "3.10"
+        python-version: ["3.7"]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -28,16 +34,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install tox
 
-      - name: Python Lint
-        run: |
-          tox -e lint
-      - name: Integration Tests
-        env:
-          TEST_EMAIL_LOGIN: ${{ secrets.TEST_EMAIL_LOGIN }}
-          TEST_EMAIL_PASSWORD: ${{ secrets.TEST_EMAIL_PASSWORD }}
-          TEST_EMAIL_IMAP_SERVER: ${{ secrets.TEST_EMAIL_IMAP_SERVER }}
-        run: |
-          tox -e testcore
+      - name: Check out my other private repo
+        uses: actions/checkout@master
+        with:
+          repository: ${{ matrix.project.repository }}
 
       - name: Slack Notification
         uses: homoluctus/slatify@master
