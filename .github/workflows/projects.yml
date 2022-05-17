@@ -17,8 +17,9 @@ jobs:
         project:
           - marlin:
             repository: "MarlinFirmware/Marlin"
+            folder: Marlin
             envname: "teensy36"
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest]
         python-version: ["3.7"]
     runs-on: ${{ matrix.os }}
     steps:
@@ -34,10 +35,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install tox
 
-      - name: Check out my other private repo
+      - name: Check out ${{ matrix.project.repository }}
         uses: actions/checkout@master
         with:
           repository: ${{ matrix.project.repository }}
+
+      - name: Check out ${{ matrix.project.repository }}
+        uses: actions/checkout@master
+        with:
+          repository: ${{ matrix.project.repository }}
+
+      - name: Compile ${{ matrix.project.repository }}
+        run: |
+          pio run -d ${{ matrix.project.folder }} -e ${{ matrix.project.envname }}
 
       - name: Slack Notification
         uses: homoluctus/slatify@master
