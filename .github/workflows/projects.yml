@@ -25,6 +25,11 @@ jobs:
           #   folder: "esphome"
           #   sources: "esphome"
           #   envname: "esp32-arduino"
+          # - smartknob:
+          #   repository: "scottbez1/smartknob"
+          #   folder: "smartknob"
+          #   config_dir: "smartknob/firmware"
+          #   envname: "view"
         os: [ubuntu-latest]
         python-version: ["3.7"]
     runs-on: ${{ matrix.os }}
@@ -54,7 +59,7 @@ jobs:
         # The board is selected the in 'Configuration.h' file
         # Currently, there is no way to pass the board via a build flag -D
         # as there is a prescript that carries out some validations before build step
-        if: ${{ matrix.project == 'marlin' }}
+        if: ${{ contains(matrix.project.repository, "Marlin") }}
         run: sed -i 's/#define MOTHERBOARD BOARD_RAMPS_14_EFB/#define MOTHERBOARD BOARD_TEENSY35_36/g' ${{ matrix.project.folder }}/Marlin/Configuration.h
 
       - name: Install ESPHome dependencies
