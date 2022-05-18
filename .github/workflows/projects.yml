@@ -40,6 +40,7 @@ jobs:
         # Note: espurna doesn't work with Python 3.6
         python-version: ["3.7"]
     runs-on: ${{ matrix.os }}
+    steps:
 
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
