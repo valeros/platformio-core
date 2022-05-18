@@ -30,14 +30,17 @@ jobs:
       - uses: actions/checkout@v2
         with:
           submodules: "recursive"
+
       - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
+
       - name: Install PlatformIO
         run: |
           python -m pip install --upgrade pip
           pip install .
+
       - name: Check out ${{ matrix.project.repository }}
         uses: actions/checkout@v2
         with:
@@ -50,17 +53,13 @@ jobs:
         # Currently, there is no way to pass the board via a build flag -D
         # as there is a prescript that carries out some validations before build step
         if: ${{ matrix.project.repository == 'MarlinFirmware/Marlin' }}
-        run: |
-          sed -i 's/#define MOTHERBOARD BOARD_RAMPS_14_EFB/#define MOTHERBOARD BOARD_TEENSY35_36/g' ${{ matrix.project.folder }}/Marlin/Configuration.h
+        run: sed -i 's/#define MOTHERBOARD BOARD_RAMPS_14_EFB/#define MOTHERBOARD BOARD_TEENSY35_36/g' ${{ matrix.project.folder }}/Marlin/Configuration.h
 
-      - name: Install esphome dependencies
-        # Requires esptool package used in a post_script
+      - name: Install ESPHome dependencies
+        # Requires esptool package is used in a post script
         if: ${{ matrix.project.repository == 'esphome/esphome' }}
-        run: |
-          pio platform install platformio/espressif32@3.5.0 --with-package tool-esptoolpy
-
+        run: pip install esptool
 
       - name: Compile ${{ matrix.project.repository }}
-        run: |
-          pio run -d ${{ matrix.project.folder }} -e ${{ matrix.project.envname }}
+        run: pio run -d ${{ matrix.project.folder }} -e ${{ matrix.project.envname }}
 
