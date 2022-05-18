@@ -25,11 +25,21 @@ jobs:
           #   folder: "esphome"
           #   sources: "esphome"
           #   envname: "esp32-arduino"
-          - smartknob:
-            repository: "scottbez1/smartknob"
-            folder: "smartknob"
-            config_dir: "smartknob/firmware"
-            envname: "view"
+          # - smartknob:
+          #   repository: "scottbez1/smartknob"
+          #   folder: "smartknob"
+          #   config_dir: "smartknob/firmware"
+          #   envname: "view"
+          - espurna:
+            repository: "xoseperez/espurna"
+            folder: "espurna"
+            config_dir: "espurna/code"
+            envname: "nodemcu-lolin"
+          - OpenMQTTGateway:
+            repository: "1technophile/OpenMQTTGateway"
+            folder: "OpenMQTTGateway"
+            config_dir: "OpenMQTTGateway"
+            envname: "esp32-m5atom"
         os: [ubuntu-latest]
         python-version: ["3.7"]
     runs-on: ${{ matrix.os }}
