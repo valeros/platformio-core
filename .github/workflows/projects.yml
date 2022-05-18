@@ -15,10 +15,10 @@ jobs:
       fail-fast: false
       matrix:
         project:
-          - marlin:
-            repository: "MarlinFirmware/Marlin"
-            folder: Marlin
-            envname: "teensy36"
+          # - marlin:
+          #   repository: "MarlinFirmware/Marlin"
+          #   folder: Marlin
+          #   envname: "teensy36"
           - esphome:
             repository: "esphome/esphome"
             folder: esphome
@@ -52,6 +52,13 @@ jobs:
         if: ${{ matrix.project.repository == 'MarlinFirmware/Marlin' }}
         run: |
           sed -i 's/#define MOTHERBOARD BOARD_RAMPS_14_EFB/#define MOTHERBOARD BOARD_TEENSY35_36/g' ${{ matrix.project.folder }}/Marlin/Configuration.h
+
+      - name: Install esphome dependencies
+        # Requires esptool package used in a post_script
+        if: ${{ matrix.project.repository == 'MarlinFirmware/Marlin' }}
+        run: |
+          pio platform install platformio/espressif32@3.5.0 --with-package tool-esptoolpy
+
 
       - name: Compile ${{ matrix.project.repository }}
         run: |
