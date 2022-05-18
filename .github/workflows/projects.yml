@@ -63,5 +63,7 @@ jobs:
         run: pip install esptool
 
       - name: Compile ${{ matrix.project.repository }}
-        run: pio run -d ${{ matrix.project.config_dir }} -e ${{ matrix.project.envname }}
+        run: |
+          echo '${{ matrix.project }}'
+          pio run -d ${{ matrix.project.config_dir }} -e ${{ matrix.project.envname }}
 
