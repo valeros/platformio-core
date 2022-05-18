@@ -7,7 +7,6 @@ on:
       - projects/*
       - feature/project*
       - develop
-  pull_request:
 
 jobs:
   build:
@@ -23,7 +22,7 @@ jobs:
           - esphome:
             repository: "esphome/esphome"
             folder: "esphome"
-            sources: "esphome"
+            config_dir: "esphome"
             env_name: "esp32-arduino"
           - smartknob:
             repository: "scottbez1/smartknob"
@@ -41,6 +40,7 @@ jobs:
             config_dir: "OpenMQTTGateway"
             env_name: "esp32-m5atom"
         os: [ubuntu-latest]
+        # Note: espurna doesn't work with Python <3.7
         python-version: ["3.6", "3.7", "3.8", "3.9", "3.10"]
     runs-on: ${{ matrix.os }}
     steps:
@@ -79,6 +79,5 @@ jobs:
 
       - name: Compile ${{ matrix.project.repository }}
         run: |
-          echo '${{ matrix.project }}'
           pio run -d ${{ matrix.project.config_dir }} -e ${{ matrix.project.env_name }}
 
