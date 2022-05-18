@@ -41,7 +41,7 @@ jobs:
             env_name: "esp32-m5atom"
         os: [ubuntu-latest]
         # Note: espurna doesn't work with Python <3.7
-        python-version: ["3.6", "3.7", "3.8", "3.9", "3.10"]
+        python-version: ["3.7", "3.8", "3.9", "3.10"]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
