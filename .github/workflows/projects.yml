@@ -46,7 +46,7 @@ jobs:
         # Currently, there is no way to pass the board via a build flag -D
         # as there is a prescript that carries out some validations before build step
         if: ${{ matrix.project.repository == 'MarlinFirmware/Marlin' }}
-        - run: |
+        run: |
           sed -i 's/#define MOTHERBOARD BOARD_RAMPS_14_EFB/#define MOTHERBOARD BOARD_TEENSY35_36/g' ${{ matrix.project.folder }}/Marlin/Configuration.h
 
       - name: Compile ${{ matrix.project.repository }}
