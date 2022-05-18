@@ -3,9 +3,6 @@ name: Projects
 on:
   push:
     branches:
-      - release/*
-      - projects/*
-      - feature/project*
       - develop
 
 jobs:
@@ -18,30 +15,30 @@ jobs:
             repository: "MarlinFirmware/Marlin"
             folder: "Marlin"
             config_dir: "Marlin"
-            env_name: "teensy36"
-          - esphome:
-            repository: "esphome/esphome"
-            folder: "esphome"
-            config_dir: "esphome"
-            env_name: "esp32-arduino"
-          - smartknob:
-            repository: "scottbez1/smartknob"
-            folder: "smartknob"
-            config_dir: "smartknob/firmware"
-            env_name: "view"
-          - espurna:
-            repository: "xoseperez/espurna"
-            folder: "espurna"
-            config_dir: "espurna/code"
-            env_name: "nodemcu-lolin"
-          - OpenMQTTGateway:
-            repository: "1technophile/OpenMQTTGateway"
-            folder: "OpenMQTTGateway"
-            config_dir: "OpenMQTTGateway"
-            env_name: "esp32-m5atom"
+            env_name: "mega2560"
+          # - esphome:
+          #   repository: "esphome/esphome"
+          #   folder: "esphome"
+          #   config_dir: "esphome"
+          #   env_name: "esp32-arduino"
+          # - smartknob:
+          #   repository: "scottbez1/smartknob"
+          #   folder: "smartknob"
+          #   config_dir: "smartknob/firmware"
+          #   env_name: "view"
+          # - espurna:
+          #   repository: "xoseperez/espurna"
+          #   folder: "espurna"
+          #   config_dir: "espurna/code"
+          #   env_name: "nodemcu-lolin"
+          # - OpenMQTTGateway:
+          #   repository: "1technophile/OpenMQTTGateway"
+          #   folder: "OpenMQTTGateway"
+          #   config_dir: "OpenMQTTGateway"
+          #   env_name: "esp32-m5atom"
         os: [ubuntu-latest]
-        # Note: espurna doesn't work with Python <3.7
-        python-version: ["3.7", "3.8", "3.9", "3.10"]
+        # Note: espurna doesn't work with Python 3.6
+        python-version: ["3.7"]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -64,13 +61,6 @@ jobs:
           submodules: "recursive"
           repository: ${{ matrix.project.repository }}
           path: ${{ matrix.project.folder }}
-
-      - name: Configure Marlin target
-        # The board is selected in the 'Configuration.h' file. Currently, there is no
-        # way to pass the board via a build flag (e.g. -D) as there is a prescript that
-        # carries out some validations before the build step
-        if: ${{ contains(matrix.project.repository, 'Marlin') }}
-        run: sed -i 's/#define MOTHERBOARD BOARD_RAMPS_14_EFB/#define MOTHERBOARD BOARD_TEENSY35_36/g' ${{ matrix.project.folder }}/Marlin/Configuration.h
 
       - name: Install ESPHome dependencies
         # Requires esptool package as it's used in a custom prescript
