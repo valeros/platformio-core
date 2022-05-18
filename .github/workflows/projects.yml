@@ -33,22 +33,24 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install git+https://github.com/platformio/platformio-core
+          pip install .
 
       - name: Check out ${{ matrix.project.repository }}
-        uses: actions/checkout@master
-        with:
-          repository: ${{ matrix.project.repository }}
+        - uses: actions/checkout@v2
+          with:
+            submodules: "recursive"
+            repository: ${{ matrix.project.repository }}
+            path: ${{ matrix.project.folder }}
 
-      - name: Check out ${{ matrix.project.repository }}
-        uses: actions/checkout@v2
-        with:
-          repository: ${{ matrix.project.repository }}
-          path: ${{ matrix.project.folder }}
+      - name: Configure Marlin target
+        # The board is selected the in 'Configuration.h' file
+        # Currently, there is no way to pass the board via a build flag -D
+        # as there is a prescript that carries out some validations before build step
+        if: ${{ matrix.project.repository == 'MarlinFirmware/Marlin' }}
+        - run: |
+          sed -i 's/#define MOTHERBOARD BOARD_RAMPS_14_EFB/#define MOTHERBOARD BOARD_TEENSY35_36/g' ${{ matrix.project.folder }}/Marlin/Configuration.h
 
       - name: Compile ${{ matrix.project.repository }}
         run: |
-          ls -al
-          ls ${{ matrix.project.folder }}
           pio run -d ${{ matrix.project.folder }} -e ${{ matrix.project.envname }}
 
