@@ -23,7 +23,6 @@ jobs:
         - os: windows-latest
           project: {"esphome": "", "repository": "esphome/esphome", "folder": "esphome", "config_dir": "esphome", "env_name": "esp32-arduino"}
 
-    if: "${{ !contains(matrix.project.repository, 'esphome') }}"
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
