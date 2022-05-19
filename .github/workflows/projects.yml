@@ -19,8 +19,8 @@ jobs:
             config_dir: "esphome"
             env_name: "esp32-arduino"
         os: [ubuntu-latest, windows-latest, macos-latest]
-    # Skip ESPHome on Windows
-    if: "${{ !(contains(matrix.project.repository, 'esphome') && matrix.os == 'windows-latest') }}"
+        exclude:
+          - {os: windows-latest, project.repository: "esphome/esphome"}
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
