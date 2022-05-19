@@ -18,16 +18,32 @@ jobs:
             folder: "esphome"
             config_dir: "esphome"
             env_name: "esp32-arduino"
+          # - smartknob:
+          #   repository: "scottbez1/smartknob"
+          #   folder: "smartknob"
+          #   config_dir: "smartknob/firmware"
+          #   env_name: "view"
+          # - espurna:
+          #   repository: "xoseperez/espurna"
+          #   folder: "espurna"
+          #   config_dir: "espurna/code"
+          #   env_name: "nodemcu-lolin"
+          # - OpenMQTTGateway:
+          #   repository: "1technophile/OpenMQTTGateway"
+          #   folder: "OpenMQTTGateway"
+          #   config_dir: "OpenMQTTGateway"
+          #   env_name: "esp32-m5atom"
         os: [ubuntu-latest, windows-latest, macos-latest]
-        exclude:
-          - {os: windows-latest, project.repository: "esphome/esphome"}
+
+
+    if: "${{ !(contains(matrix.project.repository, 'esphome') && matrix.os == 'windows-latest') }}"
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
         with:
           submodules: "recursive"
 
-      - name: Set up Python 3.9
+      - name: Set up Python ${{ matrix.python-version }}
         uses: actions/setup-python@v2
         with:
           python-version: 3.9
